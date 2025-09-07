@@ -1,5 +1,5 @@
----
 name: Node.js CI/CD Pipeline
+
 on:
   push:
     branches:
@@ -7,28 +7,29 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
   compile:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version:
-          - 18.x
-          - 20.x
-          - 22.x
+        node-version: [18.x, 20.x, 22.x]
+
     steps:
       - name: Checkout code
-          uses: actions/checkout@v4
-      
+        uses: actions/checkout@v4
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: "23"
-      - name: Fronend Compilation
+          node-version: ${{ matrix.node-version }}
+
+      - name: Frontend Compilation
         run: |
           cd client
-          fing . -name "*.js" -exec node --check {} +
+          find . -name "*.js" -exec node --check {} +
+
       - name: Backend Compilation
         run: |
           cd api
-          find . =name "*.js" -exec node --check {} +
+          find . -name "*.js" -exec node --check {} +
